@@ -1,0 +1,34 @@
+---
+title: "Dcurran3_6"
+output: html_document
+date: "2022-10-15"
+---
+
+```{r}
+library(lpSolveAPI)
+library(lpSolve)
+```
+Setting up a matrix
+```{r}
+cost <- matrix(c(22,14,30,16,20,24), ncol = 3,
+               byrow = TRUE)
+cost
+```
+Setting up constraints
+```{r}
+plant.signs <- rep("<=",2) 
+plantcap <- c(600,625)
+city.signs <- rep(">=", 3)
+citydemand <- c(80,60,70)
+```
+solving the model
+```{r}
+lptrans <- lp.transport(cost, "min", plant.signs, plantcap,city.signs,citydemand)
+```
+These are the results for the production for each plant.
+```{r}
+lptrans$status
+lptrans$solution
+lptrans$objval
+```
+
