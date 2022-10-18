@@ -1,0 +1,41 @@
+---
+title: "dcurran3_4"
+output: html_document
+---
+```{r}
+library(lpSolveAPI)
+```
+```{r}
+lprec <- make.lp(0,9) 
+set.objfn(lprec, c(420,420,420,360,360,360,300,300,300))
+
+lp.control(lprec,sense='max')
+
+add.constraint(lprec, c(1,0,0,1,0,0,1,0,0),"<=",750 )
+add.constraint(lprec, c(0,1,0,0,1,0,0,1,0),"<=",900 )
+add.constraint(lprec, c(0,0,1,0,0,1,0,0,1),"<=", 450)
+add.constraint(lprec, c(20,0,0,15,0,0,12,0,0),"<=",13000)
+add.constraint(lprec, c(0,20,0,0,15,0,0,12,0),"<=",12000 )
+add.constraint(lprec, c(0,0,20,0,0,15,0,0,12),"<=", 5000)
+add.constraint(lprec, c(1,1,1,0,0,0,0,0,0),"<=",900)
+add.constraint(lprec, c(0,0,0,1,1,1,0,0,0),"<=",1200)
+add.constraint(lprec, c(0,0,0,0,0,0,1,1,1),"<=",7500)
+
+#set.bounds(lprec, lower = (0,0,0,0,0,0,0,0,0), columns = c(1,2,3,4,5,6,7,8,9))
+
+RowNames <- c("R1","R2", "R3", "R4","R5","R6", "R7","R8","R9")
+ColNames <- c("L1", "L2", "L3", "M1", "M2", "M3", "S1", "S2", "S3")
+dimnames(lprec) <- list(RowNames, ColNames)
+
+lprec
+
+write.lp(lprec, filename = "wc.lp", type = "lp")
+```
+```{r}
+solve(lprec)
+```
+```{r}
+get.objective(lprec)
+get.variables(lprec)
+```
+
