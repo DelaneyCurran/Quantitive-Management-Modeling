@@ -1,0 +1,23 @@
+---
+title: "examnole for 4"
+output: html_document
+date: "2022-10-18"
+---
+
+```{r}
+library(lpSolveAPI)
+```
+```{r}
+lprec <- make.lp(0,2)
+set.objfn(lprec, c(3,5))
+lp.control(lprec,sense='max')
+add.constraint(lprec, c(1,0), "<=", 4)
+add.constraint(lprec, c(0,2), "<=", 12)
+add.constraint(lprec, c(3,2), "<=", 18)
+RowNames <-c("Plant1", "Plant2", "Plant3")
+ColNames <- c("product1","product1")
+dimnames(lprec) <- list(RowNames,ColNames)
+lprec
+```
+
+
