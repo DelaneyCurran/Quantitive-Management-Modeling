@@ -1,1 +1,43 @@
-
+---
+title: "dcurran3_8"
+output:
+  word_document: default
+  html_document: default
+date: "2022-10-28"
+---
+```{r}
+library(Benchmarking)
+```
+```{r}
+x<- matrix(c(150,400,320,520,350,320))
+y <- matrix(c(14000,14000,42000,28000,19000,14000,35000,21000,10500,42000,25000,15000), ncol = 2)
+colnames(y) <- c("Reimbursed Patient-Days","Privately Paid Patient-Days")
+colnames(x) <- c("Staffed Hours per Day")
+dea(x,y,RTS = "crs")
+```
+```{r}
+c <- dea(x,y,RTS = "crs")
+peers(c)
+lambda(c)
+```
+```{r}
+f <- dea(x,y,RTS = "fdh")
+peers(f)
+lambda(f)
+```
+```{r}
+v <- dea(x,y,RTS = "vrs")
+peers(v)
+lambda(v)
+```
+```{r}
+i <- dea(x,y,RTS = "irs")
+peers(i)
+lambda(i)
+```
+```{r}
+d <- dea(x,y,RTS = "drs")
+peers(d)
+lambda(d)
+```
+After running all these test it is clear to see that everyone is slightly different in the outcome. However overall each one shows similar things. First facility three seems to be the most efficient across the board. One difference that I noticed is that in some test facility for performs well and others it does not.
