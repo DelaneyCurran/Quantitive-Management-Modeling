@@ -1,0 +1,68 @@
+---
+title: "Dcurran3_9"
+output:
+  word_document: default
+  html_document: default
+date: "2022-11-01"
+---
+
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+1. 
+Maximize Z = P - 6C - 3D, where  
+P = total (discounted) profit over the life of the new products, 
+C = change (in either direction) in the current level of employment, 
+D = decrease (if any) in next year’s earnings from the current year’s level. 
+
+Subject to:
+6x1 + 4x2 + 5x3 = 50 (employment goal)
+8x1 + 7x2 + 5x3 >= 75 (earnings goal)
+
+Auxiliary Variables
+y1 = 6x1 + 4x2 + 5x3 - 50
+y2 = 8x1 + 7x2 + 5x3 - 75
+
+Penalty Weights:
+(P) Profit = 20x1 + 15x2 + 25x3
+(C) Level of employment + or - = 6
+(D) Earnings goal - = 3
+
+2. 
+Maximize Z = P - ((6y1+) - (6y1-) - (3y2-))
+(y1+) - (y1-) = 6x1 + 4x2 + 5x3 -50
+(y2+) - (y2-) = 8x1 + 7x2 + 5x3 - 75
+
+Rewritten constraints to get final formulation:
+Maximize Z = P - (6(y1+) - 6(y1-) - 3(y2-))
+
+(y1+) - (y1-) = 6x1 + 4x2 + 5x3 - 50
+(y2+) - (y2-) = 8x1 + 7x2 + 5x3 - 75
+
+Where:
+6x1 + 4x2 + 5x3 - (y1+ - y1-) = 50
+8x1 + 7x2 + 5x3 - (y2+ - y2-) = 75
+
+and:
+P = 20x1 + 15x2 + 25x3
+Z = (20x1 + 15x2 + 25x3) - (6(y1+) - 6(y1-) - 3(y2-))
+
+3.
+```{r}
+library(lpSolveAPI)
+
+lprec <- make.lp(2, 6)
+set.objfn(lprec, c(20,15,25,-6,-6,-3))
+lp.control(lprec, sense='max')
+
+add.constraint(lprec, c(6,4,5,-1,1,0), "=", 50)
+add.constraint(lprec, c(8,7,5,0,0,1), "=", 75)
+
+solve(lprec)
+get.objective(lprec)
+get.variables(lprec)
+```
+
+Based on the results we will want to produce 15 units of product three. We do not want to produce products one or two. So, y1+ will be 15. This means that the employee goal Will be exceeded by 25 employees. The goal was to keep employees at 50 but with This plan it will require 75 employees. Therefore we will face a penalty 6 x 25 or 300. However y2+ is 0 So we meet our goal. The earnings for next year will be 75 which is on track. 
+
